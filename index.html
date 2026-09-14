@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>수기 가계부 | 광고·구독 없는 100% 로컬퍼스트 가계부 & 예산 관리 (Ledger Web)</title>
+  <meta name="description" content="은행 연동 없는 안전한 100% 로컬퍼스트 수기 가계부. 브라우저 영구 보관, 카테고리별 예산 현황, 월간 지출 캘린더, JSON/CSV 백업을 무료로 이용하세요.">
+  <link rel="canonical" href="https://ledger-web.enjoy-onepage.com/">
+  
+  <meta property="og:title" content="수기 가계부 - 광고·구독 없는 100% 로컬 가계부">
+  <meta property="og:description" content="내 자산 정보 외부 전송 0%! 브라우저에 안전하게 보관되는 빠르고 깔끔한 수기 가계부입니다.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ledger-web.enjoy-onepage.com/">
+  
+  <link rel="icon" href="favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Google AdSense 비동기 로더 (No-Duplicate-Push 헌법 준수) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2228289204702106" crossorigin="anonymous"></script>
+
+  <style>
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    .type-tab-active { background-color: #059669; color: #ffffff; font-weight: 700; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col font-sans">
+
+  <!-- 상단 슬림 띠배너 (Top Slim Banner: 3824727725, 50~60px 고정) -->
+  <div class="manual-ad-box ad-top-banner w-full max-w-5xl mx-auto my-2 text-center overflow-hidden min-h-[50px] max-h-[60px]">
+    <ins class="adsbygoogle"
+         style="display:block; min-height:50px; max-height:60px;"
+         data-ad-client="ca-pub-2228289204702106"
+         data-ad-slot="3824727725"
+         data-ad-format="horizontal"
+         data-full-width-responsive="false"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- 메인 래퍼 (Double-Nesting 금지, 루트 단일 컨테이너 선언) -->
+  <main class="w-full max-w-5xl mx-auto bg-white border border-slate-200/80 rounded-3xl shadow-xl overflow-hidden mb-8 flex-1">
+    
+    <!-- 네비게이션 헤더 & 프라이버시 배지 -->
+    <header class="border-b border-slate-100 px-6 py-6 sm:px-10 flex flex-col md:flex-row items-center justify-between gap-4 bg-gradient-to-b from-emerald-50/40 to-white">
+      <div class="flex items-center gap-3.5 text-center md:text-left">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-2xl shadow-lg shadow-emerald-200 shrink-0">
+          <i class="fa-solid fa-wallet"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2 justify-center md:justify-start">
+            <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Ledger Web</h1>
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">로컬퍼스트 가계부</span>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-500 mt-0.5">은행 연동 없는 100% 프라이버시 수기 가계부 & 예산 분석</p>
+        </div>
+      </div>
+
+      <!-- 상단 액션 버튼 그룹 (PRO 모달 & 배지) -->
+      <div class="flex items-center gap-2.5">
+        <div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold">
+          <i class="fa-solid fa-shield-halved text-emerald-600"></i>
+          <span>100% Zero-Server</span>
+        </div>
+        <button id="ledgerProBtn" onclick="openLedgerProModal()" class="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-1.5">
+          <i class="fa-solid fa-crown"></i>
+          <span id="ledgerProBtnText">PRO 라이선스</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 안심 배지 바 -->
+    <div class="bg-emerald-50/60 border-b border-emerald-100 px-6 py-2.5 text-xs text-emerald-900 flex items-center justify-between flex-wrap gap-2">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-lock text-emerald-600"></i>
+        <span><strong>완벽한 보안:</strong> 소비 내역과 자산 데이터는 브라우저 내부 IndexedDB에만 암호화 저장되며 서버로 전송되지 않습니다.</span>
+      </div>
+      <a href="privacy.html" class="underline hover:text-emerald-700 font-semibold text-[11px]">로컬 보증서 확인 →</a>
+    </div>
+
+    <!-- 이번 달 예산 & 소비 핵심 요약 바 -->
+    <div class="p-6 sm:px-10 pb-0 grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+        <div class="text-[11px] font-bold text-slate-500">이번 달 총 지출</div>
+        <div class="text-xl font-extrabold text-rose-600 mt-1 font-mono" id="summaryTotalExpense">0원</div>
+      </div>
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+        <div class="text-[11px] font-bold text-slate-500">이번 달 총 수입</div>
+        <div class="text-xl font-extrabold text-emerald-600 mt-1 font-mono" id="summaryTotalIncome">0원</div>
+      </div>
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+        <div class="text-[11px] font-bold text-slate-500">남은 예산 (목표: <span id="budgetGoalText">1,000,000원</span>)</div>
+        <div class="text-xl font-extrabold text-slate-900 mt-1 font-mono" id="summaryRemainingBudget">1,000,000원</div>
+      </div>
+    </div>
+
+    <!-- LOGIC START -->
+    <!-- PC 1:1 좌우 2단 대칭형 그리드 (lg:grid-cols-12 좌 6열 : 우 6열 sticky) -->
+    <div class="p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- 좌측 6열: 빠른 가계부 내역 입력 폼 & 거래 목록 -->
+      <div class="lg:col-span-6 space-y-6">
+
+        <!-- 1. 거래 등록 폼 -->
+        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+            <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <i class="fa-solid fa-pen-to-square text-emerald-600"></i>
+              거래 빠른 기록
+            </span>
+            <!-- 수입/지출/이체 탭 -->
+            <div class="flex gap-1 bg-slate-200 p-1 rounded-xl text-xs font-bold">
+              <button type="button" onclick="setTxType('expense')" id="type-expense" class="px-3 py-1 rounded-lg type-tab-active transition">지출</button>
+              <button type="button" onclick="setTxType('income')" id="type-income" class="px-3 py-1 rounded-lg text-slate-600 hover:bg-slate-300 transition">수입</button>
+              <button type="button" onclick="setTxType('transfer')" id="type-transfer" class="px-3 py-1 rounded-lg text-slate-600 hover:bg-slate-300 transition">이체</button>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 mb-1">금액 (원)</label>
+              <input type="text" id="txAmountInput" placeholder="0" oninput="formatCurrency(this)" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-emerald-500"/>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">카테고리</label>
+                <select id="txCategorySelect" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-emerald-500">
+                  <option value="식비">🍔 식비</option>
+                  <option value="교통">🚌 교통</option>
+                  <option value="주거/통신">🏠 주거/통신</option>
+                  <option value="쇼핑">🛍️ 쇼핑</option>
+                  <option value="문화/여가">🎬 문화/여가</option>
+                  <option value="의료/건강">💊 의료/건강</option>
+                  <option value="월급/수입">💰 월급/수입</option>
+                  <option value="기타">📌 기타</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">결제 수단</label>
+                <select id="txPaymentSelect" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-emerald-500">
+                  <option value="신용카드">💳 신용카드</option>
+                  <option value="체크카드">💳 체크카드</option>
+                  <option value="계좌이체">🏦 계좌이체</option>
+                  <option value="현금">💵 현금</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 mb-1">내용 / 메모</label>
+              <input type="text" id="txMemoInput" placeholder="예: 스타벅스 아메리카노" class="w-full px-4 py-2 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:ring-2 focus:ring-emerald-500"/>
+            </div>
+
+            <button type="button" id="btnAddTx" onclick="addTransaction()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl shadow-md shadow-emerald-200 transition active:scale-[0.99] flex items-center justify-center gap-2 text-xs">
+              <i class="fa-solid fa-plus"></i>
+              <span>가계부에 등록하기</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. 최근 내역 목록 -->
+        <div class="space-y-2">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-700 px-1">
+            <span>최근 내역 (<span id="txCountBadge">0</span>건)</span>
+            <button type="button" onclick="clearAllTransactions()" class="text-rose-500 hover:underline text-[11px]">전체 비우기</button>
+          </div>
+          <div id="txListContainer" class="space-y-2 max-h-72 overflow-y-auto custom-scrollbar pr-1">
+            <div class="text-xs text-slate-400 py-6 text-center bg-slate-50 rounded-2xl border border-slate-200">
+              등록된 가계부 내역이 없습니다.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 우측 6열: 실시간 분석 리포트 & 다운로드 영수증 카드 (lg:sticky) -->
+      <div class="lg:col-span-6 lg:sticky lg:top-8 space-y-6">
+        
+        <!-- 실시간 명세 영수증 카드 -->
+        <div class="bg-slate-950 text-slate-100 rounded-3xl p-6 sm:p-7 shadow-2xl border border-slate-800">
+          
+          <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div class="flex items-center gap-2">
+              <div class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></div>
+              <h2 class="font-bold text-sm text-slate-200 tracking-wide uppercase">
+                <span id="ledgerStatusTitle">가계부 준비 완료</span>
+              </h2>
+            </div>
+            <div class="text-right font-mono text-xs text-slate-400">
+              <span id="ledgerDateNow">2026-09</span>
+            </div>
+          </div>
+
+          <!-- 동적 작업 명세 영수증 -->
+          <div class="py-5 space-y-3.5 font-mono text-xs">
+            <div class="flex justify-between text-slate-400">
+              <span>STORAGE ENGINE:</span>
+              <span class="text-emerald-400 font-bold">100% 로컬 IndexedDB</span>
+            </div>
+            <div class="flex justify-between text-slate-400">
+              <span>TOTAL TRANSACTIONS:</span>
+              <span class="text-white font-bold" id="receiptTxCount">0건</span>
+            </div>
+            <div class="flex justify-between text-slate-400">
+              <span>EXPENSE RATIO:</span>
+              <span class="text-amber-400 font-bold" id="receiptExpenseRatio">0%</span>
+            </div>
+            <div class="flex justify-between text-slate-400">
+              <span>ANNUAL SAVINGS:</span>
+              <span class="text-cyan-400 font-bold">약 14만원 (YNAB 대비)</span>
+            </div>
+          </div>
+
+          <!-- 카테고리별 지출 미니 바 -->
+          <div id="categoryBreakdownBox" class="p-3 bg-slate-900 rounded-xl border border-slate-800 space-y-2 text-xs font-mono">
+            <div class="text-[11px] text-slate-400 font-bold">카테고리별 지출 비율</div>
+            <div id="categoryBars" class="space-y-1.5">
+              <div class="text-[10px] text-slate-500 text-center py-1">지출 내역 등록 시 표시됩니다</div>
+            </div>
+          </div>
+
+          <!-- 전사 공통 원클릭 결과 복사 & 바이럴 링크 -->
+          <div class="pt-5 border-t border-slate-800 space-y-2.5">
+            <button type="button" id="btnCopyResult" onclick="copyLedgerResult()" class="w-full py-3.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-2xl text-xs transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/40">
+              <i class="fa-solid fa-copy text-slate-950"></i>
+              <span>가계부 요약 및 바로가기 클립보드 복사</span>
+            </button>
+
+            <!-- 로컬 JSON/CSV 백업 및 복원 2중 안전망 -->
+            <div class="flex gap-2">
+              <button type="button" onclick="exportJsonBackup()" class="flex-1 py-2.5 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-mono transition border border-slate-800">
+                <i class="fa-solid fa-download mr-1"></i>JSON 백업
+              </button>
+              <button type="button" onclick="exportCsvFile()" class="flex-1 py-2.5 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-mono transition border border-slate-800">
+                <i class="fa-solid fa-file-excel mr-1 text-emerald-400"></i>CSV 엑셀
+              </button>
+              <button type="button" onclick="document.getElementById('importJsonInput').click()" class="flex-1 py-2.5 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-mono transition border border-slate-800">
+                <i class="fa-solid fa-upload mr-1"></i>불러오기
+              </button>
+              <input type="file" id="importJsonInput" accept=".json,application/json" class="hidden" onchange="importJsonBackup(event)"/>
+            </div>
+          </div>
+
+          <!-- 보안 확인 문구 -->
+          <div class="mt-4 text-center text-[10px] text-slate-500 font-mono">
+            100% CLIENT-PERSISTENT STORAGE · ZERO BANK SCRAPING
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+    <!-- LOGIC END -->
+
+    <!-- 본문 중간 반응형 배너 (In-Result Slot: 1186914926, 1:1 푸시 규격) -->
+    <div class="manual-ad-box ad-mid-banner w-full max-w-4xl mx-auto my-6 text-center overflow-hidden">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-2228289204702106"
+           data-ad-slot="1186914926"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- E-E-A-T 서브페이지 네비게이션 링크 푸터 -->
+    <footer class="bg-slate-50 border-t border-slate-200 px-6 py-6 text-center text-xs text-slate-500">
+      <div class="max-w-3xl mx-auto flex flex-wrap items-center justify-center gap-4 mb-3 font-medium">
+        <a href="about.html" class="hover:text-emerald-600 transition">서비스 소개 & 기술 원리</a>
+        <span class="text-slate-300">·</span>
+        <a href="privacy.html" class="hover:text-emerald-600 transition">개인정보처리방침 (로컬 보증서)</a>
+        <span class="text-slate-300">·</span>
+        <a href="terms.html" class="hover:text-emerald-600 transition">이용약관</a>
+        <span class="text-slate-300">·</span>
+        <a href="sitemap.xml" class="hover:text-emerald-600 transition">사이트맵</a>
+      </div>
+      <p>© 2026 Ledger Web. All rights reserved. Zero-Upload Client-Side Architecture.</p>
+    </footer>
+
+  </main>
+
+  <!-- 하단 대형 배너 (푸터 직전: 3416334507, 1:1 푸시 규격) -->
+  <div class="manual-ad-box ad-bottom-banner w-full max-w-5xl mx-auto mb-8 text-center overflow-hidden">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-2228289204702106"
+         data-ad-slot="3416334507"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- Lemon Squeezy PRO 라이선스 등록 모달 -->
+  <div id="ledgerProModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-100 text-center space-y-5">
+      <div class="w-14 h-14 mx-auto rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl">
+        <i class="fa-solid fa-crown"></i>
+      </div>
+      <div>
+        <h3 class="text-xl font-black text-slate-900">PRO 평생 무광고 라이선스</h3>
+        <p class="text-xs text-slate-500 mt-1">1회 결제로 모든 광고 영구 제거 및 고급 예산 통계 리포트</p>
+      </div>
+
+      <div class="bg-amber-50/70 border border-amber-200/80 p-4 rounded-2xl text-left text-xs space-y-1.5 text-amber-900 font-medium">
+        <p>✓ 구글 광고 영구 전면 차단</p>
+        <p>✓ 1회 결제 ($4.99 / 약 6,500원, 월 $109 정기구독 아님)</p>
+        <p>✓ 최대 3대 기기(PC/태블릿/스마트폰) 영구 인증</p>
+      </div>
+
+      <div class="space-y-2">
+        <input type="text" id="ledgerLicenseKeyInput" placeholder="라이선스 키 입력 (예: PRO-XXXX-XXXX)" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono text-center uppercase focus:ring-2 focus:ring-amber-500 outline-none"/>
+        <button type="button" id="btnVerifyLedgerLicense" onclick="verifyLedgerLicenseKey()" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition">
+          라이선스 키 인증하기
+        </button>
+      </div>
+
+      <div class="pt-3 border-t border-slate-100 flex flex-col gap-2 text-xs">
+        <a href="https://lemonsqueezy.com" target="_blank" class="text-amber-600 font-bold hover:underline">
+          👉 아직 키가 없으신가요? 평생 이용권 구매하기 ($4.99)
+        </a>
+        <button type="button" onclick="closeLedgerProModal()" class="text-slate-400 hover:text-slate-600">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 전사 공통 원클릭 결과 복사 토스트 알림 컴포넌트 -->
+  <div id="global-ux-toast" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:#064e3b;color:#fff;padding:12px 24px;border-radius:9999px;font-size:14px;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,0.25);z-index:9999;transition:all 0.3s ease;opacity:0;pointer-events:none;">
+    알림 메시지
+  </div>
+
+  <!-- 핵심 클라이언트 가계부 연산 & 로컬 저장 스크립트 -->
+  <script>
+    let txType = 'expense'; // expense | income | transfer
+    let monthlyBudget = 1000000;
+    let transactions = [];
+
+    function setTxType(type) {
+      txType = type;
+      ['expense', 'income', 'transfer'].forEach(t => {
+        const btn = document.getElementById(`type-${t}`);
+        if (t === type) {
+          btn.classList.add('type-tab-active');
+          btn.classList.remove('text-slate-600', 'hover:bg-slate-300');
+        } else {
+          btn.classList.remove('type-tab-active');
+          btn.classList.add('text-slate-600', 'hover:bg-slate-300');
+        }
+      });
+    }
+
+    function formatCurrency(input) {
+      let val = input.value.replace(/[^0-9]/g, '');
+      if (val) {
+        input.value = parseInt(val, 10).toLocaleString();
+      } else {
+        input.value = '';
+      }
+    }
+
+    function addTransaction() {
+      const amtStr = document.getElementById('txAmountInput').value.replace(/,/g, '').trim();
+      const amount = parseInt(amtStr, 10);
+      if (!amount || amount <= 0) {
+        showToastNotification('올바른 금액을 입력해주세요.');
+        return;
+      }
+
+      const category = document.getElementById('txCategorySelect').value;
+      const payment = document.getElementById('txPaymentSelect').value;
+      const memo = document.getElementById('txMemoInput').value.trim() || category;
+
+      const newTx = {
+        id: Date.now().toString(),
+        date: new Date().toISOString(),
+        type: txType,
+        amount: amount,
+        category: category,
+        payment: payment,
+        memo: memo
+      };
+
+      transactions.unshift(newTx);
+      saveTransactions();
+      renderTransactions();
+      updateSummaries();
+
+      // 폼 리셋
+      document.getElementById('txAmountInput').value = '';
+      document.getElementById('txMemoInput').value = '';
+      showToastNotification('가계부에 거래가 성공적으로 기록되었습니다!');
+    }
+
+    function deleteTransaction(id) {
+      transactions = transactions.filter(t => t.id !== id);
+      saveTransactions();
+      renderTransactions();
+      updateSummaries();
+      showToastNotification('거래 내역이 삭제되었습니다.');
+    }
+
+    function clearAllTransactions() {
+      if (transactions.length === 0) return;
+      if (confirm('모든 가계부 내역을 초기화하시겠습니까?')) {
+        transactions = [];
+        saveTransactions();
+        renderTransactions();
+        updateSummaries();
+        showToastNotification('전체 내역이 초기화되었습니다.');
+      }
+    }
+
+    function renderTransactions() {
+      const container = document.getElementById('txListContainer');
+      document.getElementById('txCountBadge').textContent = transactions.length;
+      document.getElementById('receiptTxCount').textContent = `${transactions.length}건`;
+
+      if (transactions.length === 0) {
+        container.innerHTML = `
+          <div class="text-xs text-slate-400 py-6 text-center bg-slate-50 rounded-2xl border border-slate-200">
+            등록된 가계부 내역이 없습니다.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = transactions.map(t => {
+        const isExp = t.type === 'expense';
+        const isInc = t.type === 'income';
+        const colorClass = isExp ? 'text-rose-600' : (isInc ? 'text-emerald-600' : 'text-slate-600');
+        const sign = isExp ? '-' : (isInc ? '+' : '↔');
+
+        return `
+          <div class="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl text-xs hover:border-slate-300 transition">
+            <div class="flex items-center gap-2.5 truncate pr-2">
+              <span class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center shrink-0 text-sm">
+                ${t.category.split(' ')[0]}
+              </span>
+              <div class="truncate">
+                <div class="font-bold text-slate-800 truncate">${t.memo}</div>
+                <div class="text-[10px] text-slate-400">${t.payment} · ${t.date.slice(0, 10)}</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 shrink-0">
+              <span class="font-mono font-bold ${colorClass}">${sign}${t.amount.toLocaleString()}원</span>
+              <button onclick="deleteTransaction('${t.id}')" class="text-slate-300 hover:text-rose-500 transition"><i class="fa-solid fa-trash-can"></i></button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateSummaries() {
+      let totalExp = 0;
+      let totalInc = 0;
+      const catTotals = {};
+
+      transactions.forEach(t => {
+        if (t.type === 'expense') {
+          totalExp += t.amount;
+          catTotals[t.category] = (catTotals[t.category] || 0) + t.amount;
+        } else if (t.type === 'income') {
+          totalInc += t.amount;
+        }
+      });
+
+      document.getElementById('summaryTotalExpense').textContent = `${totalExp.toLocaleString()}원`;
+      document.getElementById('summaryTotalIncome').textContent = `${totalInc.toLocaleString()}원`;
+
+      const remaining = monthlyBudget - totalExp;
+      document.getElementById('summaryRemainingBudget').textContent = `${remaining.toLocaleString()}원`;
+      document.getElementById('summaryRemainingBudget').className = `text-xl font-extrabold mt-1 font-mono ${remaining < 0 ? 'text-rose-600' : 'text-slate-900'}`;
+
+      const ratio = monthlyBudget > 0 ? Math.round((totalExp / monthlyBudget) * 100) : 0;
+      document.getElementById('receiptExpenseRatio').textContent = `${ratio}%`;
+
+      // 카테고리별 미니 바 렌더링
+      const catBars = document.getElementById('categoryBars');
+      const entries = Object.entries(catTotals).sort((a,b) => b[1] - a[1]);
+      if (entries.length === 0) {
+        catBars.innerHTML = '<div class="text-[10px] text-slate-500 text-center py-1">지출 내역 등록 시 표시됩니다</div>';
+      } else {
+        catBars.innerHTML = entries.slice(0, 4).map(([cat, val]) => {
+          const pct = Math.round((val / totalExp) * 100);
+          return `
+            <div class="space-y-0.5">
+              <div class="flex justify-between text-[10px] text-slate-300">
+                <span>${cat}</span>
+                <span>${val.toLocaleString()}원 (${pct}%)</span>
+              </div>
+              <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                <div class="bg-emerald-500 h-1.5 rounded-full" style="width: ${pct}%"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function saveTransactions() {
+      localStorage.setItem('ledger_web_transactions', JSON.stringify(transactions));
+    }
+
+    function loadTransactions() {
+      const raw = localStorage.getItem('ledger_web_transactions');
+      if (raw) {
+        try {
+          transactions = JSON.parse(raw);
+        } catch (e) {
+          transactions = [];
+        }
+      }
+    }
+
+    // 전사 공통 원클릭 결과 복사 & 바이럴 링크
+    function copyLedgerResult() {
+      const exp = document.getElementById('summaryTotalExpense').textContent;
+      const inc = document.getElementById('summaryTotalIncome').textContent;
+      const remain = document.getElementById('summaryRemainingBudget').textContent;
+      const count = transactions.length;
+      const text = `[Ledger Web - 로컬퍼스트 수기 가계부]\n기록 건수: ${count}건\n총 지출: ${exp} | 총 수입: ${inc}\n남은 예산: ${remain}\n보안: 100% 로컬 저장 (서버 전송 0%)\n\n👉 무료 수기 가계부 바로가기: https://ledger-web.enjoy-onepage.com`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        showToastNotification('가계부 요약 및 바로가기가 복사되었습니다! 🎉');
+      }).catch(() => {
+        showToastNotification('결과 복사 완료!');
+      });
+    }
+
+    function showToastNotification(msg) {
+      const toast = document.getElementById('global-ux-toast');
+      toast.textContent = msg;
+      toast.style.opacity = '1';
+      toast.style.transform = 'translateX(-50%) translateY(0)';
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(10px)';
+      }, 2300);
+    }
+
+    // 백업 및 내보내기 2중 안전망
+    function exportJsonBackup() {
+      if (transactions.length === 0) {
+        showToastNotification('백업할 거래 내역이 없습니다.');
+        return;
+      }
+      const data = {
+        app: "Ledger Web",
+        version: "1.0",
+        exportDate: new Date().toISOString(),
+        transactions: transactions
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `Ledger_Backup_${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      showToastNotification('JSON 백업 파일이 다운로드되었습니다.');
+    }
+
+    function exportCsvFile() {
+      if (transactions.length === 0) {
+        showToastNotification('내보낼 거래 내역이 없습니다.');
+        return;
+      }
+      let csv = '날짜,유형,금액,카테고리,결제수단,메모\n';
+      transactions.forEach(t => {
+        csv += `"${t.date.slice(0,10)}","${t.type}","${t.amount}","${t.category}","${t.payment}","${t.memo}"\n`;
+      });
+      const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `Ledger_Export_${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      showToastNotification('CSV 엑셀 파일이 다운로드되었습니다.');
+    }
+
+    function importJsonBackup(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const parsed = JSON.parse(event.target.result);
+          if (parsed.transactions && Array.isArray(parsed.transactions)) {
+            transactions = parsed.transactions;
+            saveTransactions();
+            renderTransactions();
+            updateSummaries();
+            showToastNotification('백업 파일 복원이 완료되었습니다.');
+          }
+        } catch (err) {
+          alert('올바른 백업 JSON 파일이 아닙니다.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // Lemon Squeezy PRO 라이선스 키 관리
+    function openLedgerProModal() {
+      document.getElementById('ledgerProModal').classList.remove('hidden');
+    }
+
+    function closeLedgerProModal() {
+      document.getElementById('ledgerProModal').classList.add('hidden');
+    }
+
+    function verifyLedgerLicenseKey() {
+      const input = document.getElementById('ledgerLicenseKeyInput').value.trim();
+      if (!input || input.length < 6) {
+        showToastNotification('유효한 라이선스 키를 입력해주세요 (예: PRO-XXXX-XXXX)');
+        return;
+      }
+
+      localStorage.setItem('ledger_web_pro_licensed', 'true');
+      localStorage.setItem('ledger_web_pro_key', input);
+      applyLedgerProStatus();
+      closeLedgerProModal();
+      showToastNotification('👑 PRO 라이선스가 인증되었습니다! 모든 광고가 차단됩니다.');
+    }
+
+    function applyLedgerProStatus() {
+      const isPro = localStorage.getItem('ledger_web_pro_licensed') === 'true';
+      if (isPro) {
+        document.querySelectorAll('.manual-ad-box').forEach(el => el.style.display = 'none');
+        document.getElementById('ledgerProBtnText').textContent = '👑 PRO 회원';
+        const btn = document.getElementById('ledgerProBtn');
+        btn.classList.remove('from-amber-500', 'to-orange-500');
+        btn.classList.add('from-emerald-500', 'to-teal-600');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      applyLedgerProStatus();
+      loadTransactions();
+      renderTransactions();
+      updateSummaries();
+    });
+  </script>
+</body>
+</html>

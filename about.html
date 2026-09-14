@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>서비스 소개 & 안심 철학 | 수기 가계부</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased py-12 px-4 sm:px-6">
+  <div class="max-w-3xl mx-auto bg-white p-8 sm:p-12 rounded-3xl shadow-sm border border-slate-200">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg">
+        <i class="fa-solid fa-wallet"></i>
+      </div>
+      <div>
+        <h1 class="text-2xl font-black text-slate-900">Ledger Web 기술 아키텍처 & E-E-A-T</h1>
+        <p class="text-xs text-slate-500">광고와 구독 피로 없는 로컬퍼스트(Local-First) 수기 가계부</p>
+      </div>
+    </div>
+    
+    <div class="space-y-6 text-sm leading-relaxed text-slate-600">
+      <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 text-emerald-950 text-xs">
+        💡 <strong>개발 배경:</strong> 기존 가계부 앱들의 과도한 구독료($109/년), 복잡한 은행 싱크 실패 및 백업 복원 불안을 해소하고자, PC 큰 화면 분석과 모바일 즉시 기록을 겸비한 로컬 웹앱으로 탄생했습니다.
+      </div>
+      
+      <h2 class="text-lg font-bold text-slate-800">1. 핵심 기술 규격</h2>
+      <ul class="list-disc pl-5 space-y-1.5">
+        <li><strong>IndexedDB 영구 저장:</strong> 캐시 삭제 시에도 보존되는 브라우저 로컬 데이터베이스</li>
+        <li><strong>이체 거래 통계 격리:</strong> Spendee 등의 오류와 달리 통장 간 이체는 지출/수입 통계에서 자동 분리</li>
+        <li><strong>2중 백업 안전망:</strong> 원클릭 JSON 백업 및 CSV 엑셀 연동</li>
+      </ul>
+    </div>
+
+    <div class="mt-8 pt-6 border-t border-slate-100 flex justify-between items-center text-xs">
+      <a href="./" class="text-emerald-600 font-bold hover:underline">← 가계부로 돌아가기</a>
+      <span class="text-slate-400">Antigravity Architecture Standard</span>
+    </div>
+  </div>
+</body>
+</html>
