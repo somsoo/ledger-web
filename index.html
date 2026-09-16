@@ -45,20 +45,56 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "수기 가계부 | 광고·구독 없는 100% 로컬퍼스트 가계부 & 예산 관리 (Ledger Web)",
-  "url": "https://ledger-web.enjoy-onepage.com/",
-  "description": "은행 연동 없는 안전한 100% 로컬퍼스트 수기 가계부. 브라우저 영구 보관, 카테고리별 예산 현황, 월간 지출 캘린더, JSON/CSV 백업을 무료로 이용하세요.",
-  "applicationCategory": "UtilitiesApplication",
-  "operatingSystem": "All",
-  "browserRequirements": "Requires JavaScript. Requires HTML5.",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "KRW"
-  }
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "https://ledger-web.enjoy-onepage.com/#webapp",
+      "name": "Ledger Web",
+      "url": "https://ledger-web.enjoy-onepage.com/",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "description": "은행 연동 없는 안전한 100% 로컬퍼스트 수기 가계부. 브라우저 영구 보관, 카테고리별 예산 현황, 월간 지출 캘린더, JSON/CSV 백업을 무료로 이용하세요.",
+      "image": "https://ledger-web.enjoy-onepage.com/og-image.png",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "KRW"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://ledger-web.enjoy-onepage.com/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "입력한 지출 내역이 사이트를 닫아도 유지되나요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "네, 브라우저 내부 로컬스토리지에 암호화 보관되므로 언제든 다시 접속해도 이전 내역이 그대로 유지됩니다."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "엑셀 파일(CSV)로 내보내서 컴퓨터에 백업할 수 있나요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "상단 '데이터 내보내기'를 누르면 전 기간의 가계부 내역이 표준 엑셀 CSV 파일로 다운로드됩니다."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "모바일 스마트폰에서도 사용하기 편한가요?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "모바일 키패드에 최적화된 터치 UI로 설계되어 결제 직후 3초 만에 금액과 카테고리를 간편하게 기입할 수 있습니다."
+          }
+        }
+      ]
+    }
+  ]
 }
-</script>
+  </script>
 <meta content="https://ledger-web.enjoy-onepage.com/og-image.png" property="og:image"/><meta content="summary_large_image" name="twitter:card"/><meta content="수기 가계부 - 광고·구독 없는 100% 로컬 가계부" name="twitter:title"/><meta content="내 자산 정보 외부 전송 0%! 브라우저에 안전하게 보관되는 빠르고 깔끔한 수기 가계부입니다." name="twitter:description"/><meta content="https://ledger-web.enjoy-onepage.com/og-image.png" name="twitter:image"/></head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col font-sans">
 <!-- 상단 슬림 띠배너 (Top Slim Banner: 3824727725, 50~60px 고정) -->
