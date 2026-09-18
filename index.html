@@ -112,6 +112,15 @@
 }
   </script>
 <meta content="https://ledger-web.enjoy-onepage.com/og-image.png" property="og:image"/><meta content="summary_large_image" name="twitter:card"/><meta content="수기 가계부 - 광고·구독 없는 100% 로컬 가계부" name="twitter:title"/><meta content="내 자산 정보 외부 전송 0%! 브라우저에 안전하게 보관되는 빠르고 깔끔한 수기 가계부입니다." name="twitter:description"/><meta content="https://ledger-web.enjoy-onepage.com/og-image.png" name="twitter:image"/><style id="mobile-hardening-shield">
+  /* 모바일 한글 단어 단위 줄바꿈 보존 & 버튼 텍스트 단일행 쉴드 */
+  body, h1, h2, h3, h4, p, span, label {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+  button, [role="button"], a.btn {
+    white-space: nowrap;
+    word-break: keep-all;
+  }
   @media (max-width: 640px) {
     input, select, textarea {
       font-size: 16px !important;
