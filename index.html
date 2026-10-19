@@ -8,7 +8,7 @@
 
 <link href="apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>수기 가계부 | 광고·구독 없는 로컬 가계부 &amp;</title>
+<title>수기 가계부 | 안전한 로컬퍼스트 가계부</title>
 <meta content="은행 연동 없는 로컬퍼스트 수기 가계부. 카테고리별 예산, 월간 지출 캘린더, JSON/CSV 백업을 무료로 쓰세요." name="description"/>
 <link href="https://ledger-web.enjoy-onepage.com/" rel="canonical"/>
 <meta content="수기 가계부 - 광고·구독 없는 100% 로컬 가계부" property="og:title"/>
@@ -551,8 +551,8 @@
 
     function addTransaction() {
       const amtStr = document.getElementById('txAmountInput').value.replace(/,/g, '').trim();
-      const amount = parseInt(amtStr, 10);
-      if (!amount || amount <= 0) {
+      const amount = Math.max(0, parseInt(amtStr, 10) || 0);
+      if (amount <= 0) {
         showToastNotification('올바른 금액을 입력해주세요.');
         return;
       }
@@ -662,7 +662,7 @@
       document.getElementById('summaryRemainingBudget').textContent = `${remaining.toLocaleString()}원`;
       document.getElementById('summaryRemainingBudget').className = `text-xl font-extrabold mt-1 font-mono ${remaining < 0 ? 'text-rose-600' : 'text-slate-900'}`;
 
-      const ratio = monthlyBudget > 0 ? Math.round((totalExp / monthlyBudget) * 100) : 0;
+      const ratio = monthlyBudget > 0 ? Math.round((totalExp / Math.max(1, monthlyBudget)) * 100) : 0;
       document.getElementById('receiptExpenseRatio').textContent = `${ratio}%`;
 
       // 카테고리별 미니 바 렌더링
@@ -672,7 +672,7 @@
         catBars.innerHTML = '<div class="text-[10px] text-slate-500 text-center py-1">지출 내역 등록 시 표시됩니다</div>';
       } else {
         catBars.innerHTML = entries.slice(0, 4).map(([cat, val]) => {
-          const pct = Math.round((val / totalExp) * 100);
+          const pct = totalExp > 0 ? Math.round((val / totalExp) * 100) : 0;
           return `
             <div class="space-y-0.5">
               <div class="flex justify-between text-[10px] text-slate-300">
